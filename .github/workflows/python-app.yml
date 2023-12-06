@@ -12,14 +12,15 @@ on:
 permissions:
   contents: read
 
-jobs:
-  build:
+defaults:
+  run:
+    working-directory: ./example-app
 
+
+jobs:
+   
+  build:
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./example-app
 
     steps:
     - uses: actions/checkout@v3
@@ -34,17 +35,32 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install --no-root
-        
-    - name: Unit tests
-      run: |
-        poetry run task test
-        
+
+  linting:
+    runs-on: ubuntu-latest
+    steps:
     - name: Linting
       run: |
         poetry run task lint
-
+        
+  security:
+    runs-on: ubuntu-latest
+    steps:
     - name: Security testing
       run: |
         poetry run task security
+        
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Formating
+      run: |
+        poetry run task formatter
       
+  unittest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Unit tests
+      run: |
+        poetry run task test
 
