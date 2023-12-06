@@ -22,7 +22,10 @@ concurrency:
 jobs:
    
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -43,7 +46,10 @@ jobs:
         key: ${{ runner.os }}-venv
 
   linting:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     needs: build
     steps:
     - uses: actions/checkout@v3
@@ -64,7 +70,10 @@ jobs:
         poetry run task lint
         
   security:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     needs: build
     steps:
     - uses: actions/checkout@v3
@@ -85,7 +94,10 @@ jobs:
         poetry run task security
         
   formatter:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     needs: build
     steps:
     - uses: actions/checkout@v3
@@ -106,7 +118,10 @@ jobs:
         poetry run task formatter
       
   unittest:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     needs: [linting, security, formatter]
     steps:
     - uses: actions/checkout@v3
